@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>薯薯神器</title>
+
+  <style>
+    :root{
+      --xhs-red:#ff2442;
+      --xhs-red-dark:#e91f3b;
+      --bg:#f6f7f9;
+      --card:#fff;
+      --text:#1f2329;
+      --muted:rgba(31,35,41,.6);
+      --border:rgba(31,35,41,.10);
+      --shadow:0 10px 28px rgba(31,35,41,.10);
+      --radius:18px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{
+      height:100%;
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+      "PingFang SC","Hiragino Sans GB","Noto Sans CJK SC","Microsoft YaHei",Arial,sans-serif;
+      color:var(--text);
+      background:var(--bg);
+    }
+
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      height: 150px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(167.97deg, rgb(71, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+      box-shadow: 0 6px 18px rgba(255,36,66,.18);
+    }
+    .topbarTitle{
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color:#fff;
+      line-height:1;
+      text-shadow: 0 2px 10px rgba(0,0,0,.18);
+      user-select:none;
+    }
+
+    .page{
+      padding: 16px 14px 28px;
+    }
+
+    .wrap{
+      width: min(760px, 100%);
+      margin: 0 auto;
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .section{
+      padding: 18px;
+    }
+    .section + .section{
+      border-top: 1px solid rgba(31,35,41,.08);
+    }
+
+    .headRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+    }
+    .headLeft{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .avatar{
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background: url("/xhs.png") no-repeat center;
+      background-size: cover;
+      box-shadow: 0 10px 18px rgba(255,36,66,.16);
+      flex: 0 0 auto;
+    }
+    .headText{
+      min-width: 0;
+    }
+    .headTitle{
+      font-size: 18px;
+      font-weight: 900;
+      margin: 0;
+      line-height: 1.2;
+    }
+    .headSub{
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .label{
+      margin-top: 14px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .inputWrap{
+      margin-top: 10px;
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      padding: 12px 12px;
+      border: 1px solid rgba(31,35,41,.12);
+      border-radius: 14px;
+      background: #fff;
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+    .inputWrap:focus-within{
+      border-color: rgba(255,36,66,.55);
+      box-shadow: 0 0 0 4px rgba(255,36,66,.12);
+    }
+
+    /* ✅ 仅新增：输入框前置图标 */
+    .inputIcon{
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+      color: rgba(31,35,41,.38);
+    }
+
+    .input{
+      width: 100%;
+      border:none;
+      outline:none;
+      background: transparent;
+      font-size: 14px;
+      line-height: 22px;
+      color: var(--text);
+    }
+    .input::placeholder{
+      color: rgba(31,35,41,.35);
+    }
+
+    .miniBtn{
+      border:none;
+      outline:none;
+      background: rgba(31,35,41,.06);
+      color: rgba(31,35,41,.75);
+      border-radius: 12px;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease;
+      white-space: nowrap;
+    }
+    .miniBtn:hover{ background: rgba(31,35,41,.08); }
+    .miniBtn:active{ transform: translateY(1px); }
+
+    .btnPrimary{
+      margin-top: 14px;
+      width:100%;
+      border:none;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: .2px;
+      color:#fff;
+      background: linear-gradient(135deg, var(--xhs-red), #ff4d63);
+      box-shadow: 0 14px 26px rgba(255,36,66,.22);
+      cursor:pointer;
+      transition: transform .12s ease, filter .12s ease, opacity .12s ease;
+    }
+    .btnPrimary:hover{ filter: brightness(1.03); }
+    .btnPrimary:active{ transform: translateY(1px); }
+    .btnPrimary:disabled{ opacity: .6; cursor:not-allowed; }
+
+    .statusRow{
+      margin-top: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+    }
+    .status{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      font-size: 12px;
+      color: rgba(31,35,41,.70);
+    }
+    .dot{
+      width: 8px;
+      height: 8px;
+      border-radius: 99px;
+      background: rgba(31,35,41,.25);
+    }
+
+    /* ✅ 不起眼的复制 icon（放在“完成”旁边） */
+    .iconBtn{
+      border:none;
+      background: transparent;
+      padding: 4px;
+      border-radius: 10px;
+      cursor: pointer;
+      color: rgba(31,35,41,.38);
+      opacity: .85;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      transition: background .15s ease, color .15s ease, opacity .15s ease, transform .08s ease;
+    }
+    .iconBtn:hover{
+      background: rgba(31,35,41,.06);
+      color: rgba(31,35,41,.60);
+      opacity: 1;
+    }
+    .iconBtn:active{
+      transform: translateY(1px);
+    }
+
+    .outputTitle{
+      font-size: 12px;
+      font-weight: 900;
+      color: rgba(31,35,41,.60);
+      margin-bottom: 10px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 10px;
+    }
+    .output{
+      margin:0;
+      background:#0e1116;
+      color: rgba(255,255,255,.90);
+      border-radius: 14px;
+      padding: 12px;
+      min-height: 160px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 12px;
+      line-height: 1.55;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+    }
+
+    .footer{
+      padding: 14px 6px 0;
+      text-align:center;
+      font-size: 12px;
+      color: rgba(31,35,41,.45);
+    }
+
+    @media (max-width:420px){
+      .topbarTitle{ font-size: 26px; }
+      .section{ padding: 14px; }
+    }
+  </style>
+</head>
+
+<body>
+<header class="topbar">
+  <div class="topbarTitle">🍠薯薯神器</div>
+</header>
+
+<main class="page">
+  <div class="wrap">
+    <section class="card">
+      <div class="section">
+        <div class="headRow">
+          <div class="headLeft">
+            <div class="avatar" aria-hidden="true"></div>
+            <div class="headText">
+              <div class="headTitle">笔记采集</div>
+              <div class="headSub">输入图文笔记详情，即可一键获取数据</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="inputWrap">
+          <!-- ✅ 仅新增：前置图标（链接图标） -->
+          <svg class="inputIcon" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M3.9 12a5 5 0 0 1 5-5h3v2h-3a3 3 0 1 0 0 6h3v2h-3a5 5 0 0 1-5-5Zm7.1 1h2v-2h-2v2Zm4-6h-3V5h3a5 5 0 1 1 0 10h-3v-2h3a3 3 0 1 0 0-6Z"/>
+          </svg>
+
+          <input
+                  id="detailUrl"
+                  class="input"
+                  type="text"
+                  placeholder="粘贴小红书笔记链接…"
+                  autocomplete="off"
+                  spellcheck="false"
+          />
+          <button class="miniBtn" type="button" id="clearBtn">清空</button>
+        </div>
+
+        <button class="btnPrimary" type="button" id="collectNow">立即采集</button>
+
+        <div class="statusRow">
+          <div class="status">
+            <span class="dot" id="statusDot"></span>
+            <span id="status">就绪</span>
+
+            <!-- ✅ debug_url 复制按钮：默认隐藏 -->
+            <button id="copyDebugUrl" class="iconBtn" type="button" title="复制 debug_url" style="display:none">
+              <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor"
+                      d="M16 1H8c-1.1 0-2 .9-2 2v2H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-1h2c1.1 0 2-.9 2-2V7l-5-6Zm-1 18H5V9h10v10Zm4-3h-2V7H8V3h7.17L19 7.83V16Z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!--暂时注释-->
+      <!--      <div class="section">-->
+      <!--        <div class="outputTitle">-->
+      <!--          <span>输出（调试/结果）</span>-->
+      <!--          <span style="color:rgba(31,35,41,.45); font-weight:800;">JSON</span>-->
+      <!--        </div>-->
+      <!--        <pre id="output" class="output"></pre>-->
+      <!--      </div>-->
+    </section>
+
+    <div class="footer">© 采集工具 · For 三界君</div>
+  </div>
+</main>
+
+<script type="module" src="/src/index.ts"></script>
+
+<script>
+  (function () {
+    const input = document.getElementById("detailUrl");
+    const pasteBtn = document.getElementById("pasteBtn");
+    const clearBtn = document.getElementById("clearBtn");
+
+    pasteBtn?.addEventListener("click", async () => {
+      try {
+        const text = await navigator.clipboard.readText();
+        input.value = (text || "").trim();
+        input.focus();
+      } catch (e) {
+        alert("无法读取剪贴板，请手动粘贴。");
+      }
+    });
+
+    clearBtn?.addEventListener("click", () => {
+      input.value = "";
+      input.focus();
+    });
+  })();
+</script>
+</body>
+</html>
